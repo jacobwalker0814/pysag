@@ -1,10 +1,10 @@
 import unittest
-from pysag import reader
+from .. import Reader
 
 
 class ReaderTest(unittest.TestCase):
-    def setup(self):
-        self.reader = reader.Reader()
+    def setUp(self):
+        self.reader = Reader()
 
     def test_read_simple_single(self):
         expected = {
