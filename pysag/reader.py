@@ -1,3 +1,3 @@
 class Reader:
-    def read():
-        True
+    def read(self):
+        return True
