@@ -17,18 +17,21 @@ class Reader:
         # level elements in our data. Any .yml files there will be parsed into
         # results
 
-        data = {}
+        all_data = {}
         for data_type in os.listdir(data_dir):
-            data[data_type] = []
+            all_data[data_type] = []
             for file_name in glob.glob('%s/%s/*' % (data_dir, data_type)):
                 # Read the file as YAML
                 f = open(file_name, 'r')
-                datum = yaml.load(f)
+                data = yaml.load(f)
                 f.close()
 
                 # The file's basename is its id
                 basename = os.path.splitext(os.path.basename(file_name))[0]
-                datum['id'] = basename
-                data[data_type].append(datum)
+                data['id'] = basename
+                node = DataNode()
+                node.populate(data)
 
-        return data
+                all_data[data_type].append(node)
+
+        return all_data
