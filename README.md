@@ -16,4 +16,3 @@ At the moment the only test present is for the `Reader` class. To test it run
 ## TODO
 * Write `Writer`
 * Make/find better test runner
-* Use PIP for requirements (PyYAML)
