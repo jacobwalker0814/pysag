@@ -11,7 +11,7 @@ front end to consume a generated API.
 
 ## Tests
 At the moment the only test present is for the `Reader` class. To test it run
-`python -m pysag.test.reader`
+`python -m pysag.test.filesystem_test`
 
 ## TODO
 * Write `Writer`
