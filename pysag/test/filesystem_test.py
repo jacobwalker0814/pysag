@@ -1,7 +1,11 @@
 import unittest
 import os
-from .. import Reader
+import mockfs
+import json
+
 from .. import DataNode
+from .. import Reader
+from .. import Writer
 
 
 class DataNodeTest(unittest.TestCase):
@@ -32,6 +36,62 @@ class ReaderTest(unittest.TestCase):
     # TODO read only yml
     # TODO read multiple
     # TODO test failure cases
+
+
+class Writertest(unittest.TestCase):
+    def setUp(self):
+        self.mfs = mockfs.replace_builtins()
+        self.writer = Writer()
+
+    def tearDown(self):
+        mockfs.restore_builtins()
+
+    # A little helper for getting the contents of a JSON file
+    def parse_json_file(self, path):
+        with open(path) as f:
+            return json.load(f)
+
+    # Assertion helper
+    def assertFileExists(self, path):
+        self.assertTrue(os.path.isfile(path), "File %s does not exists" % path)
+
+    # Assertion helper
+    def assertDirExists(self, path):
+        self.assertTrue(os.path.isdir(path), "Directory %s does not exists" % path)
+
+    def test_writing_single_simple(self):
+        node = DataNode()
+        node.populate({'id': '1', 'name': 'Kell'})
+        data = {
+            'users': [node]
+        }
+
+        self.mfs.makedirs('/site/api')
+        output_dir = '/site/api'
+        self.writer.write(data, output_dir)
+
+        # A file should have been made for all of our users
+        self.assertFileExists(output_dir + '/users.json')
+        expected = {
+            'result': [
+                {'id': '1', 'name': 'Kell'}
+            ]
+        }
+        content = self.parse_json_file(output_dir + '/users.json')
+        self.assertEqual(content, expected)
+
+        # A directory should have been made to hold individual users
+        self.assertDirExists(output_dir + '/users')
+        self.assertFileExists(output_dir + '/users/1.json')
+        expected = {
+            'result': {
+                'id': '1',
+                'name': 'Kell'
+            }
+        }
+        content = self.parse_json_file(output_dir + '/users/1.json')
+        self.assertEqual(content, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
