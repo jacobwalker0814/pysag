@@ -3,6 +3,14 @@ import glob
 import yaml
 
 
+class DataNode:
+    def populate(self, data):
+        self.data = data
+
+    def export(self):
+        return self.data
+
+
 class Reader:
     def read(self, data_dir):
         # Walk through the directory {data_dir}. Any folders there become top

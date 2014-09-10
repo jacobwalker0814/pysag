@@ -1,6 +1,15 @@
 import unittest
 import os
 from .. import Reader
+from .. import DataNode
+
+
+class DataNodeTest(unittest.TestCase):
+    def test_getting_what_you_give(self):
+        data = {"foo": "bar", "num": 1, "list": [4, 2]}
+        node = DataNode()
+        node.populate(data)
+        self.assertEqual(data, node.export())
 
 
 class ReaderTest(unittest.TestCase):
