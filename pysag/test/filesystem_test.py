@@ -62,7 +62,18 @@ class ReaderTest(unittest.TestCase):
         self.assertTrue('users' in result, '\'users\' key must be in result')
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
         self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
-    # TODO test failure cases
+
+    def test_make_empty_list_for_empty_dirs(self):
+        fixture_path = self.fixture_base + '/fixtures/empty_dirs'
+        result = self.reader.read(fixture_path)
+
+        self.assertTrue('users' in result, '\'users\' key must be in result')
+        self.assertIs(type(result['users']), list, '\'users\' must be a list')
+        self.assertEqual(len(result['users']), 0, 'The list should be empty')
+
+        self.assertTrue('projects' in result, '\'projects\' key must be in result')
+        self.assertIs(type(result['projects']), list, '\'projects\' must be a list')
+        self.assertEqual(len(result['projects']), 1, 'There should only be 1 entry in the list')
 
 
 class Writertest(unittest.TestCase):
