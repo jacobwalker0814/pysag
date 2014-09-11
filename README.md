@@ -22,13 +22,13 @@ Given a directory called `_data` that looks like this
 
 Running the following script
 
-~~~python
+```python
 import pysag
 
 reader = pysag.Reader()
 writer = pysag.Writer()
 writer.write(reader.read('_data'), '_site/api')
-~~~
+```
 
 Will generate the following directories / files at `_site/api`
 
@@ -50,14 +50,14 @@ following set of files:
 
 `_data/posts/2008-08-14.yml`
 
-~~~yml
+```yaml
 title: Wedding Day
 author: Jacob
 coauthor: Anna
 __markdown_files__:
     abstract: 2008-08-14-abstract.md
     body: 2008-08-14-body.md
-~~~
+```
 
 `_data/posts/2008-08-14-abstract.md`
 
@@ -73,7 +73,7 @@ but they will be parsed relative to the directory of the yaml file.
 
 These three files would generate the following object in the API
 
-~~~json
+```json
 {
     "_id": "2008-08-14",
     "abstract": "<p>It was a day <strong>long</strong> in the making... but we got there!</p>",
@@ -82,7 +82,7 @@ These three files would generate the following object in the API
     "coauthor": "Anna",
     "title": "Wedding Day"
 }
-~~~
+```
 
 ## Tests
 Run the tests with `nosetests`.
