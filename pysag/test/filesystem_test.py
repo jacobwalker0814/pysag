@@ -33,8 +33,24 @@ class ReaderTest(unittest.TestCase):
         self.assertIsInstance(result['users'][0], DataNode, 'The entry in the list should be a DataNode')
         self.assertEqual(result['users'][0].export(), {'id': '1', 'name': 'Kell'}, 'The DataNode should match my data')
 
+    def test_read_simple_multiple(self):
+        # Parse the fixture
+        fixture_path = self.fixture_base + '/fixtures/simple_multiple'
+        result = self.reader.read(fixture_path)
+
+        # See what we got
+        self.assertTrue('people' in result, '\'people\' key must be in result')
+        self.assertIs(type(result['people']), list, '\'people\' must be a list')
+        self.assertEqual(len(result['people']), 3, 'There should be 3 entries in the list')
+        self.assertIsInstance(result['people'][0], DataNode, 'Entry 0 in the list should be a DataNode')
+        self.assertIsInstance(result['people'][1], DataNode, 'Entry 1 in the list should be a DataNode')
+        self.assertIsInstance(result['people'][2], DataNode, 'Entry 2 in the list should be a DataNode')
+        # TODO the reader doesn't glob the files in this order. Do I care?
+        # self.assertEqual(result['people'][0].export(), {'id': '1', 'name': 'Jerry Seinfeld'})
+        # self.assertEqual(result['people'][1].export(), {'id': '2', 'name': 'George Costanza'})
+        # self.assertEqual(result['people'][2].export(), {'id': '3', 'name': 'Cosmo Kramer'})
+
     # TODO read only yml
-    # TODO read multiple
     # TODO test failure cases
 
 
