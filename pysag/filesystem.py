@@ -37,7 +37,7 @@ class Reader:
 
                 # The file's basename is its id
                 basename = os.path.splitext(os.path.basename(file_name))[0]
-                data['id'] = basename
+                data['_id'] = basename
 
                 # If the special markdown key is present parse it's properties
                 # as markdown files and place the output on the root object.
@@ -71,7 +71,7 @@ class Writer:
             for node in data[key]:
                 node_data = node.export()
                 all_data.append(node_data)
-                path = '%s/%s/%s.json' % (output_dir, key, node_data['id'])
+                path = '%s/%s/%s.json' % (output_dir, key, node_data['_id'])
                 self._write_json(node_data, path)
 
             path = '%s/%s.json' % (output_dir, key)

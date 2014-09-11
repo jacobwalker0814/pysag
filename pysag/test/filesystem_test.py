@@ -31,7 +31,7 @@ class ReaderTest(unittest.TestCase):
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
         self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
         self.assertIsInstance(result['users'][0], DataNode, 'The entry in the list should be a DataNode')
-        self.assertEqual(result['users'][0].export(), {'id': '1', 'name': 'Kell'}, 'The DataNode should match my data')
+        self.assertEqual(result['users'][0].export(), {'_id': '1', 'name': 'Kell'}, 'The DataNode should match my data')
 
     def test_read_simple_multiple(self):
         result = self.reader.read(self.fixture_dir('simple_multiple'))
@@ -43,9 +43,9 @@ class ReaderTest(unittest.TestCase):
         self.assertIsInstance(result['people'][1], DataNode, 'Entry 1 in the list should be a DataNode')
         self.assertIsInstance(result['people'][2], DataNode, 'Entry 2 in the list should be a DataNode')
         # TODO the reader doesn't glob the files in this order. Do I care?
-        # self.assertEqual(result['people'][0].export(), {'id': '1', 'name': 'Jerry Seinfeld'})
-        # self.assertEqual(result['people'][1].export(), {'id': '2', 'name': 'George Costanza'})
-        # self.assertEqual(result['people'][2].export(), {'id': '3', 'name': 'Cosmo Kramer'})
+        # self.assertEqual(result['people'][0].export(), {'_id': '1', 'name': 'Jerry Seinfeld'})
+        # self.assertEqual(result['people'][1].export(), {'_id': '2', 'name': 'George Costanza'})
+        # self.assertEqual(result['people'][2].export(), {'_id': '3', 'name': 'Cosmo Kramer'})
 
     def test_read_only_yaml(self):
         # Parse the fixture which contains yml and other files
@@ -81,7 +81,7 @@ class ReaderTest(unittest.TestCase):
         self.assertEqual(len(result['users']), 1, 'There should be one entry')
 
         expected = {
-            'id': '1',
+            '_id': '1',
             'name': 'Jacob',
             'profile': '<p>This guy <strong>really</strong> likes markdown</p>'
         }
@@ -89,6 +89,7 @@ class ReaderTest(unittest.TestCase):
 
 
 class Writertest(unittest.TestCase):
+    # TODO test failure when directory already exists
     def setUp(self):
         self.mfs = mockfs.replace_builtins()
         self.writer = Writer()
@@ -111,7 +112,7 @@ class Writertest(unittest.TestCase):
 
     def test_writing_single_simple(self):
         node = DataNode()
-        node.populate({'id': '1', 'name': 'Kell'})
+        node.populate({'_id': '1', 'name': 'Kell'})
         data = {
             'users': [node]
         }
@@ -124,7 +125,7 @@ class Writertest(unittest.TestCase):
         self.assertFileExists(output_dir + '/users.json')
         expected = {
             'result': [
-                {'id': '1', 'name': 'Kell'}
+                {'_id': '1', 'name': 'Kell'}
             ]
         }
         content = self.parse_json_file(output_dir + '/users.json')
@@ -135,7 +136,7 @@ class Writertest(unittest.TestCase):
         self.assertFileExists(output_dir + '/users/1.json')
         expected = {
             'result': {
-                'id': '1',
+                '_id': '1',
                 'name': 'Kell'
             }
         }
