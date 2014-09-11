@@ -28,6 +28,8 @@ class Reader:
                 f = open(file_name, 'r')
                 data = yaml.load(f)
                 f.close()
+                if data is None:
+                    continue
 
                 # The file's basename is its id
                 basename = os.path.splitext(os.path.basename(file_name))[0]

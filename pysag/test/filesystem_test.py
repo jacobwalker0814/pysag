@@ -46,7 +46,7 @@ class ReaderTest(unittest.TestCase):
         # self.assertEqual(result['people'][1].export(), {'id': '2', 'name': 'George Costanza'})
         # self.assertEqual(result['people'][2].export(), {'id': '3', 'name': 'Cosmo Kramer'})
 
-    def test_read_only_yml(self):
+    def test_read_only_yaml(self):
         # Parse the fixture which contains yml and other files
         fixture_path = self.fixture_base + '/fixtures/read_only_yaml'
         result = self.reader.read(fixture_path)
@@ -55,6 +55,13 @@ class ReaderTest(unittest.TestCase):
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
         self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
 
+    def test_ignore_invalid_yaml(self):
+        fixture_path = self.fixture_base + '/fixtures/ignore_invalid_yaml'
+        result = self.reader.read(fixture_path)
+
+        self.assertTrue('users' in result, '\'users\' key must be in result')
+        self.assertIs(type(result['users']), list, '\'users\' must be a list')
+        self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
     # TODO test failure cases
 
 
