@@ -13,7 +13,7 @@ front end to consume a generated API.
 Given a directory called `_data` that looks like this
 
     _data/
-    ├── porfolio
+    ├── portfolio
     │   ├── 1.yml
     │   └── 2.yml
     └── posts
@@ -34,10 +34,10 @@ Will generate the following directories / files at `_site/api`
 
     _site/
     └── api
-        ├── porfolio
+        ├── portfolio
         │   ├── 1.json
         │   └── 2.json
-        ├── porfolio.json
+        ├── portfolio.json
         ├── posts
         │   ├── 2008-08-14.json
         │   └── 2010-05-15.json
