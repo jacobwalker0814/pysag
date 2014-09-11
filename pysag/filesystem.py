@@ -1,6 +1,7 @@
 import os
 import glob
 import yaml
+import markdown
 import json
 
 # TODO reformat for less indentation
@@ -15,6 +16,9 @@ class DataNode:
 
 
 class Reader:
+    def __init__(self):
+        self.md = markdown.Markdown()
+
     def read(self, data_dir):
         # Walk through the directory {data_dir}. Any folders there become top
         # level elements in our data. Any .yml files there will be parsed into
@@ -34,6 +38,19 @@ class Reader:
                 # The file's basename is its id
                 basename = os.path.splitext(os.path.basename(file_name))[0]
                 data['id'] = basename
+
+                # If the special markdown key is present parse it's properties
+                # as markdown files and place the output on the root object.
+                # Files are assumed to be adjacent to the yaml file in the
+                # filesystem
+                if '__markdown_files__' in data:
+                    for prop in data['__markdown_files__']:
+                        markdown_file = '%s/%s' % (os.path.dirname(file_name), data['__markdown_files__'][prop])
+                        with open(markdown_file) as f:
+                            data[prop] = self.md.convert(f.read())
+
+                    del data['__markdown_files__']
+
                 node = DataNode()
                 node.populate(data)
 

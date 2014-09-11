@@ -73,6 +73,20 @@ class ReaderTest(unittest.TestCase):
         self.assertIs(type(result['projects']), list, '\'projects\' must be a list')
         self.assertEqual(len(result['projects']), 1, 'There should only be 1 entry in the list')
 
+    def test_properties_with_markdown(self):
+        result = self.reader.read(self.fixture_dir('markdown_property'))
+
+        self.assertTrue('users' in result, '\'users\' key must be in result')
+        self.assertIs(type(result['users']), list, '\'users\' must be a list')
+        self.assertEqual(len(result['users']), 1, 'There should be one entry')
+
+        expected = {
+            'id': '1',
+            'name': 'Jacob',
+            'profile': '<p>This guy <strong>really</strong> likes markdown</p>'
+        }
+        self.assertEqual(result['users'][0].export(), expected)
+
 
 class Writertest(unittest.TestCase):
     def setUp(self):
