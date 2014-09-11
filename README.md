@@ -52,3 +52,4 @@ Run the tests with `nosetests`.
 * Allow specifying the DataNode class in yml files
 * Allow defining properties from converted markdown files
 * Better doc for expected yml file contents
+* Make everything more "Pythonic"
