@@ -23,7 +23,7 @@ class Reader:
         all_data = {}
         for data_type in os.listdir(data_dir):
             all_data[data_type] = []
-            for file_name in glob.glob('%s/%s/*' % (data_dir, data_type)):
+            for file_name in glob.glob('%s/%s/*.yml' % (data_dir, data_type)):
                 # Read the file as YAML
                 f = open(file_name, 'r')
                 data = yaml.load(f)

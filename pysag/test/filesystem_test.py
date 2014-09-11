@@ -22,11 +22,9 @@ class ReaderTest(unittest.TestCase):
         self.fixture_base = os.path.dirname(__file__)
 
     def test_read_simple_single(self):
-        # Parse the fixture
         fixture_path = self.fixture_base + '/fixtures/simple_single'
         result = self.reader.read(fixture_path)
 
-        # See what we got
         self.assertTrue('users' in result, '\'users\' key must be in result')
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
         self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
@@ -34,11 +32,9 @@ class ReaderTest(unittest.TestCase):
         self.assertEqual(result['users'][0].export(), {'id': '1', 'name': 'Kell'}, 'The DataNode should match my data')
 
     def test_read_simple_multiple(self):
-        # Parse the fixture
         fixture_path = self.fixture_base + '/fixtures/simple_multiple'
         result = self.reader.read(fixture_path)
 
-        # See what we got
         self.assertTrue('people' in result, '\'people\' key must be in result')
         self.assertIs(type(result['people']), list, '\'people\' must be a list')
         self.assertEqual(len(result['people']), 3, 'There should be 3 entries in the list')
@@ -50,7 +46,15 @@ class ReaderTest(unittest.TestCase):
         # self.assertEqual(result['people'][1].export(), {'id': '2', 'name': 'George Costanza'})
         # self.assertEqual(result['people'][2].export(), {'id': '3', 'name': 'Cosmo Kramer'})
 
-    # TODO read only yml
+    def test_read_only_yml(self):
+        # Parse the fixture which contains yml and other files
+        fixture_path = self.fixture_base + '/fixtures/read_only_yaml'
+        result = self.reader.read(fixture_path)
+
+        self.assertTrue('users' in result, '\'users\' key must be in result')
+        self.assertIs(type(result['users']), list, '\'users\' must be a list')
+        self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
+
     # TODO test failure cases
 
 
