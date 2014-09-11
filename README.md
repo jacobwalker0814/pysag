@@ -43,6 +43,44 @@ Will generate the following directories / files at `_site/api`
         │   └── 2010-05-15.json
         └── posts.json
 
+### Writing Content
+Pysag primarily only parses yaml files to generate api data. However properties
+of the generated data can be parsed from markdown files. Take for example the
+following set of files:
+
+`_data/posts/2008-08-14.yml`
+
+    title: Wedding Day
+    author: Jacob
+    coauthor: Anna
+    __markdown_files__:
+        abstract: 2008-08-14-abstract.md
+        body: 2008-08-14-body.md
+
+`_data/posts/2008-08-14-abstract.md`
+
+    It was a day **long** in the making... but we got there!
+
+`_data/posts/2008-08-14-body.md`
+
+    All (*most*) of our friends and family came out to celebrate with us.
+
+The key `__markdown_files__` in the yaml file tells pysag to look for
+additional files to parse as markdown. The names of these files do not matter
+but they will be parsed relative to the directory of the yaml file.
+
+These three files would generate the following object in the API
+
+~~~json
+{
+    "_id": "2008-08-14",
+    "abstract": "<p>It was a day <strong>long</strong> in the making... but we got there!</p>",
+    "author": "Jacob",
+    "body": "<p>All (<em>most</em>) of our friends and family came out to celebrate with us.</p>",
+    "coauthor": "Anna",
+    "title": "Wedding Day"
+}
+~~~
 
 ## Tests
 Run the tests with `nosetests`.
