@@ -48,8 +48,6 @@ Will generate the following directories / files at `_site/api`
 Run the tests with `nosetests`.
 
 ## TODO
-* Write `Writer`
-* Make/find better test runner
 * Can I use versioning in requirements.txt like `~1.0.1`?
 * Allow specifying the DataNode class in yml files
 * Allow defining properties from converted markdown files
