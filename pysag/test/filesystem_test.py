@@ -19,11 +19,13 @@ class DataNodeTest(unittest.TestCase):
 class ReaderTest(unittest.TestCase):
     def setUp(self):
         self.reader = Reader()
-        self.fixture_base = os.path.dirname(__file__)
+
+    # Helper function for defining path to a fixture dir
+    def fixture_dir(self, dir):
+        return '%s/fixtures/%s' % (os.path.dirname(__file__), dir)
 
     def test_read_simple_single(self):
-        fixture_path = self.fixture_base + '/fixtures/simple_single'
-        result = self.reader.read(fixture_path)
+        result = self.reader.read(self.fixture_dir('simple_single'))
 
         self.assertTrue('users' in result, '\'users\' key must be in result')
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
@@ -32,8 +34,7 @@ class ReaderTest(unittest.TestCase):
         self.assertEqual(result['users'][0].export(), {'id': '1', 'name': 'Kell'}, 'The DataNode should match my data')
 
     def test_read_simple_multiple(self):
-        fixture_path = self.fixture_base + '/fixtures/simple_multiple'
-        result = self.reader.read(fixture_path)
+        result = self.reader.read(self.fixture_dir('simple_multiple'))
 
         self.assertTrue('people' in result, '\'people\' key must be in result')
         self.assertIs(type(result['people']), list, '\'people\' must be a list')
@@ -48,24 +49,21 @@ class ReaderTest(unittest.TestCase):
 
     def test_read_only_yaml(self):
         # Parse the fixture which contains yml and other files
-        fixture_path = self.fixture_base + '/fixtures/read_only_yaml'
-        result = self.reader.read(fixture_path)
+        result = self.reader.read(self.fixture_dir('read_only_yaml'))
 
         self.assertTrue('users' in result, '\'users\' key must be in result')
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
         self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
 
     def test_ignore_invalid_yaml(self):
-        fixture_path = self.fixture_base + '/fixtures/ignore_invalid_yaml'
-        result = self.reader.read(fixture_path)
+        result = self.reader.read(self.fixture_dir('ignore_invalid_yaml'))
 
         self.assertTrue('users' in result, '\'users\' key must be in result')
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
         self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
 
     def test_make_empty_list_for_empty_dirs(self):
-        fixture_path = self.fixture_base + '/fixtures/empty_dirs'
-        result = self.reader.read(fixture_path)
+        result = self.reader.read(self.fixture_dir('empty_dirs'))
 
         self.assertTrue('users' in result, '\'users\' key must be in result')
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
