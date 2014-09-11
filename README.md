@@ -50,12 +50,14 @@ following set of files:
 
 `_data/posts/2008-08-14.yml`
 
-    title: Wedding Day
-    author: Jacob
-    coauthor: Anna
-    __markdown_files__:
-        abstract: 2008-08-14-abstract.md
-        body: 2008-08-14-body.md
+~~~yml
+title: Wedding Day
+author: Jacob
+coauthor: Anna
+__markdown_files__:
+    abstract: 2008-08-14-abstract.md
+    body: 2008-08-14-body.md
+~~~
 
 `_data/posts/2008-08-14-abstract.md`
 
