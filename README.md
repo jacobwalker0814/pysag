@@ -45,8 +45,7 @@ Will generate the following directories / files at `_site/api`
 
 
 ## Tests
-At the moment the only test present is for the `Reader` class. To test it run
-`python -m pysag.test.filesystem_test`
+Run the tests with `nosetests`.
 
 ## TODO
 * Write `Writer`

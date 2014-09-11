@@ -1,2 +1,3 @@
 PyYAML==3.10
 mockfs==1.0.1
+nose

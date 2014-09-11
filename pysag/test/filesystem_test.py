@@ -91,7 +91,3 @@ class Writertest(unittest.TestCase):
         }
         content = self.parse_json_file(output_dir + '/users/1.json')
         self.assertEqual(content, expected)
-
-
-if __name__ == '__main__':
-    unittest.main()
