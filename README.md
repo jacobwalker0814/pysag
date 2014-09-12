@@ -88,7 +88,9 @@ These three files would generate the following object in the API
 Run the tests with `nosetests`.
 
 ## TODO
-* Can I use versioning in requirements.txt like `~1.0.1`?
+* Better dependency management
+    * Can I use versioning in requirements.txt like `~1.0.1`?
+    * Separate file from dev requirements
 * Allow specifying the DataNode class in yml files
 * Allow defining properties from converted markdown files
 * Better doc for expected yml file contents
