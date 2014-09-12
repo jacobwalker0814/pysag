@@ -67,7 +67,9 @@ class Writer:
     def write(self, data, output_dir):
         for key in data:
             all_data = []
-            os.makedirs('%s/%s' % (output_dir, key))
+            dir = '%s/%s' % (output_dir, key)
+            if not os.path.isdir(dir):
+                os.makedirs(dir)
             for node in data[key]:
                 node_data = node.export()
                 all_data.append(node_data)
