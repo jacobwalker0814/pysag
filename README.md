@@ -54,7 +54,7 @@ following set of files:
 title: Wedding Day
 author: Jacob
 coauthor: Anna
-__markdown_files__:
+_markdown:
     abstract: 2008-08-14-abstract.md
     body: 2008-08-14-body.md
 ```
@@ -67,9 +67,9 @@ __markdown_files__:
 
     All (*most*) of our friends and family came out to celebrate with us.
 
-The key `__markdown_files__` in the yaml file tells pysag to look for
-additional files to parse as markdown. The names of these files do not matter
-but they will be parsed relative to the directory of the yaml file.
+The key `_markdown` in the yaml file tells pysag to look for additional
+files to parse as markdown. The names of these files do not matter but
+they will be parsed relative to the directory of the yaml file.
 
 These three files would generate the following object in the API
 

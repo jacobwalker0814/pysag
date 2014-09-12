@@ -43,13 +43,13 @@ class Reader:
                 # as markdown files and place the output on the root object.
                 # Files are assumed to be adjacent to the yaml file in the
                 # filesystem
-                if '__markdown_files__' in data:
-                    for prop in data['__markdown_files__']:
-                        markdown_file = '%s/%s' % (os.path.dirname(file_name), data['__markdown_files__'][prop])
+                if '_markdown' in data:
+                    for prop in data['_markdown']:
+                        markdown_file = '%s/%s' % (os.path.dirname(file_name), data['_markdown'][prop])
                         with open(markdown_file) as f:
                             data[prop] = self.md.convert(f.read())
 
-                    del data['__markdown_files__']
+                    del data['_markdown']
 
                 node = DataNode()
                 node.populate(data)
