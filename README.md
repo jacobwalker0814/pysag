@@ -1,6 +1,10 @@
 # pysag
 The Python Static API Generator
 
+[![Build Status][travis-image]][travis-link]
+[travis-image]: https://travis-ci.org/jacobwalker0814/pysag.svg?branch=master
+[travis-link]: https://travis-ci.org/jacobwalker0814/pysag
+
 ## Overview
 This package provides a `Reader` that will parse a directory for yaml files and
 generate python data structures. There is also a `Writer` that will dump this
