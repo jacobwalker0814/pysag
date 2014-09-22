@@ -6,14 +6,20 @@ import errno
 
 data_dir = '_data'
 site_dir = '_site'
+api_dir = 'api'
 
 # Source in user defined configuration if present
 if os.path.exists('pysag.py'):
     execfile('pysag.py')
 
+# Cleanse the pallate
+if os.path.isdir(site_dir):
+    shutil.rmtree(site_dir)
+
+# Generate the api. PYSAG! ^_^
 reader = pysag.Reader()
 writer = pysag.Writer()
-writer.write(reader.read(data_dir), site_dir)
+writer.write(reader.read(data_dir), "{}/{}".format(site_dir, api_dir))
 
 # Copy top level (static) files to the site dir. Exclude the data dir and the
 # site dir itself. Also exclude hidden files/folders.
