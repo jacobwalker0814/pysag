@@ -1,6 +1,8 @@
 #!env python
 import pysag
 import os
+import shutil
+import errno
 
 data_dir = '_data'
 site_dir = '_site'
@@ -12,3 +14,17 @@ if os.path.exists('pysag.py'):
 reader = pysag.Reader()
 writer = pysag.Writer()
 writer.write(reader.read(data_dir), site_dir)
+
+# Copy top level (static) files to the site dir. Exclude the data dir and the
+# site dir itself. Also exclude hidden files/folders.
+exclude_dirs = [data_dir, site_dir]
+to_copy = [x for x in os.listdir('.') if x not in exclude_dirs and '.' != x[0]]
+
+for item in to_copy:
+    try:
+        shutil.copytree(item, "{}/{}".format(site_dir, item))
+    except OSError as exc:
+        if exc.errno == errno.ENOTDIR:
+            shutil.copy(item, "{}/{}".format(site_dir, item))
+        else:
+            raise
