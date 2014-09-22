@@ -1,0 +1,14 @@
+#!env python
+import pysag
+import os
+
+data_dir = '_data'
+site_dir = '_site'
+
+# Source in user defined configuration if present
+if os.path.exists('pysag.py'):
+    execfile('pysag.py')
+
+reader = pysag.Reader()
+writer = pysag.Writer()
+writer.write(reader.read(data_dir), site_dir)
