@@ -6,43 +6,60 @@ import errno
 import SimpleHTTPServer
 import SocketServer
 
-data_dir = '_data'
-site_dir = '_site'
-api_dir = 'api'
-port = 8000
 
-# Source in user defined configuration if present
-if os.path.exists('pysag.py'):
-    execfile('pysag.py')
+def run():
+    # Cleanse the pallate
+    if os.path.isdir(site_dir):
+        shutil.rmtree(site_dir)
 
-# Cleanse the pallate
-if os.path.isdir(site_dir):
-    shutil.rmtree(site_dir)
+    # Generate the api. PYSAG! ^_^
+    reader = pysag.Reader()
+    writer = pysag.Writer()
+    writer.write(
+        reader.read(data_dir),
+        "{}/{}".format(site_dir, api_dir)
+    )
 
-# Generate the api. PYSAG! ^_^
-reader = pysag.Reader()
-writer = pysag.Writer()
-writer.write(reader.read(data_dir), "{}/{}".format(site_dir, api_dir))
+    # Copy top level (static) files to the site dir. Exclude the data dir and the
+    # site dir itself. Also exclude hidden files/folders.
+    exclude_dirs = [data_dir, site_dir]
+    to_copy = [x for x in os.listdir('.') if x not in exclude_dirs and '.' != x[0]]
 
-# Copy top level (static) files to the site dir. Exclude the data dir and the
-# site dir itself. Also exclude hidden files/folders.
-exclude_dirs = [data_dir, site_dir]
-to_copy = [x for x in os.listdir('.') if x not in exclude_dirs and '.' != x[0]]
+    for item in to_copy:
+        try:
+            shutil.copytree(item, "{}/{}".format(site_dir, item))
+        except OSError as exc:
+            if exc.errno == errno.ENOTDIR:
+                shutil.copy(item, "{}/{}".format(site_dir, item))
+            else:
+                raise
 
-for item in to_copy:
+
+def serve():
+    # Serve up the site directory
+    os.chdir(site_dir)
+
+    Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+    httpd = SocketServer.ForkingTCPServer(("", port), Handler)
+
+    print "Serving {} on port {}".format(site_dir, port)
     try:
-        shutil.copytree(item, "{}/{}".format(site_dir, item))
-    except OSError as exc:
-        if exc.errno == errno.ENOTDIR:
-            shutil.copy(item, "{}/{}".format(site_dir, item))
-        else:
-            raise
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        print "\nStopping server"
+        httpd.server_close()
 
-# Serve up the site directory
-os.chdir(site_dir)
+if '__main__' == __name__:
+    data_dir = '_data'
+    site_dir = '_site'
+    api_dir = 'api'
+    port = 8000
 
-Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-httpd = SocketServer.ForkingTCPServer(("", port), Handler)
+    # Source in user defined configuration if present
+    if os.path.exists('pysag.py'):
+        execfile('pysag.py')
 
-print "serving at port", port
-httpd.serve_forever()
+    run()
+    serve()
