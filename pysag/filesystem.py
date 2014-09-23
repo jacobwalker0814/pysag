@@ -5,6 +5,7 @@ import markdown
 import json
 
 # TODO reformat for less indentation
+# TODO error handling for bad yaml
 
 
 class DataNode:

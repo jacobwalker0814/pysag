@@ -3,10 +3,13 @@ import pysag
 import os
 import shutil
 import errno
+import SimpleHTTPServer
+import SocketServer
 
 data_dir = '_data'
 site_dir = '_site'
 api_dir = 'api'
+port = 8000
 
 # Source in user defined configuration if present
 if os.path.exists('pysag.py'):
@@ -34,3 +37,12 @@ for item in to_copy:
             shutil.copy(item, "{}/{}".format(site_dir, item))
         else:
             raise
+
+# Serve up the site directory
+os.chdir(site_dir)
+
+Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+httpd = SocketServer.ForkingTCPServer(("", port), Handler)
+
+print "serving at port", port
+httpd.serve_forever()
