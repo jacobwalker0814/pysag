@@ -1,5 +1,6 @@
 #!env python
 import pysag
+import argparse
 import os
 import shutil
 import errno
@@ -8,6 +9,7 @@ import SocketServer
 
 
 def run():
+    print "Generating data in {} from {}".format(site_dir, data_dir)
     # Cleanse the pallate
     if os.path.isdir(site_dir):
         shutil.rmtree(site_dir)
@@ -61,5 +63,17 @@ if '__main__' == __name__:
     if os.path.exists('pysag.py'):
         execfile('pysag.py')
 
-    run()
-    serve()
+    commands= ['help', 'run', 'serve']
+
+    parser = argparse.ArgumentParser(description='The Python Static API Generator')
+    parser.add_argument('command', choices=commands, help='The pysag action to take', default='help')
+
+    args = parser.parse_args()
+
+    if 'help' == args.command:
+        parser.print_help()
+    elif 'run' == args.command:
+        run()
+    elif 'serve' == args.command:
+        run()
+        serve()
