@@ -94,8 +94,7 @@ Run the tests with `nosetests`.
 ## TODO
 * Better dependency management
     * Can I use versioning in requirements.txt like `~1.0.1`?
-    * Separate file from dev requirements
+    * Separate file for dev requirements
 * Allow specifying the DataNode class in yml files
-* Allow defining properties from converted markdown files
-* Better doc for expected yml file contents
 * Make everything more "Pythonic"
+* Complete / document the executable
