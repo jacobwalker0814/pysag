@@ -2,6 +2,7 @@ import unittest
 import os
 import mockfs
 import json
+import datetime
 
 from .. import DataNode
 from .. import Reader
@@ -141,4 +142,29 @@ class Writertest(unittest.TestCase):
             }
         }
         content = self.parse_json_file(output_dir + '/users/1.json')
+        self.assertEqual(content, expected)
+
+    def test_writing_datetimes(self):
+        """
+        Test that datetime objects can be serialized to JSON. The yaml reader
+        will have converted strings like "2014-10-09" into datetimes and we
+        want to simply convert it back.
+        """
+        node = DataNode()
+        node.populate({'_id': '1', 'date': datetime.date(2014, 10, 9)})
+        data = {
+            'posts': [node]
+        }
+
+        self.mfs.makedirs('/site/api')
+        output_dir = '/site/api'
+        self.writer.write(data, output_dir)
+
+        expected = {
+            'result': {
+                '_id': '1',
+                'date': '2014-10-09'
+            }
+        }
+        content = self.parse_json_file(output_dir + '/posts/1.json')
         self.assertEqual(content, expected)

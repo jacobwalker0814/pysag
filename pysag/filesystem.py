@@ -3,6 +3,7 @@ import glob
 import yaml
 import markdown
 import json
+import datetime
 
 # TODO reformat for less indentation
 # TODO error handling for bad yaml
@@ -61,9 +62,15 @@ class Reader:
 
 
 class Writer:
+    class PysagJson(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, datetime.date):
+                return str(obj)
+            return json.JSONEncoder.default(self, obj)
+
     def _write_json(self, data, path):
         with open(path, 'w') as f:
-            json.dump({'result': data}, f)
+            json.dump({'result': data}, f, cls=self.PysagJson)
 
     def write(self, data, output_dir):
         for key in data:
