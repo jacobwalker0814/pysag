@@ -16,9 +16,10 @@ def run():
 
     # Generate the api. PYSAG! ^_^
     reader = pysag.Reader()
+    data = reader.read(data_dir)
     writer = pysag.Writer()
-    writer.write(
-        reader.read(data_dir),
+    writer.write_api(
+        data,
         "{}/{}".format(site_dir, api_dir)
     )
 

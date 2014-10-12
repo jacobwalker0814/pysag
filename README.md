@@ -1,5 +1,5 @@
 # pysag
-The Python Static API Generator
+The Python Static site and API Generator
 
 [![Build Status][travis-image]][travis-link]
 [travis-image]: https://travis-ci.org/jacobwalker0814/pysag.svg?branch=master

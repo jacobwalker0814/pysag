@@ -120,7 +120,7 @@ class Writertest(unittest.TestCase):
 
         self.mfs.makedirs('/site/api')
         output_dir = '/site/api'
-        self.writer.write(data, output_dir)
+        self.writer.write_api(data, output_dir)
 
         # A file should have been made for all of our users
         self.assertFileExists(output_dir + '/users.json')
@@ -158,7 +158,7 @@ class Writertest(unittest.TestCase):
 
         self.mfs.makedirs('/site/api')
         output_dir = '/site/api'
-        self.writer.write(data, output_dir)
+        self.writer.write_api(data, output_dir)
 
         expected = {
             'result': {

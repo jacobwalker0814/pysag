@@ -72,7 +72,7 @@ class Writer:
         with open(path, 'w') as f:
             json.dump({'result': data}, f, cls=self.PysagJson)
 
-    def write(self, data, output_dir):
+    def write_api(self, data, output_dir):
         for key in data:
             all_data = []
             dir = '%s/%s' % (output_dir, key)
