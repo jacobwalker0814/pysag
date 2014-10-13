@@ -4,17 +4,8 @@ import mockfs
 import json
 import datetime
 
-from .. import DataNode
 from .. import Reader
 from .. import Writer
-
-
-class DataNodeTest(unittest.TestCase):
-    def test_getting_what_you_give(self):
-        data = {"foo": "bar", "num": 1, "list": [4, 2]}
-        node = DataNode()
-        node.populate(data)
-        self.assertEqual(data, node.export())
 
 
 class ReaderTest(unittest.TestCase):
@@ -31,8 +22,7 @@ class ReaderTest(unittest.TestCase):
         self.assertTrue('users' in result, '\'users\' key must be in result')
         self.assertIs(type(result['users']), list, '\'users\' must be a list')
         self.assertEqual(len(result['users']), 1, 'There should only be 1 entry in the list')
-        self.assertIsInstance(result['users'][0], DataNode, 'The entry in the list should be a DataNode')
-        self.assertEqual(result['users'][0].export(), {'_id': '1', 'name': 'Kell'}, 'The DataNode should match my data')
+        self.assertEqual(result['users'][0], {'_id': '1', 'name': 'Kell'}, 'The node should match my data')
 
     def test_read_simple_multiple(self):
         result = self.reader.read(self.fixture_dir('simple_multiple'))
@@ -40,13 +30,6 @@ class ReaderTest(unittest.TestCase):
         self.assertTrue('people' in result, '\'people\' key must be in result')
         self.assertIs(type(result['people']), list, '\'people\' must be a list')
         self.assertEqual(len(result['people']), 3, 'There should be 3 entries in the list')
-        self.assertIsInstance(result['people'][0], DataNode, 'Entry 0 in the list should be a DataNode')
-        self.assertIsInstance(result['people'][1], DataNode, 'Entry 1 in the list should be a DataNode')
-        self.assertIsInstance(result['people'][2], DataNode, 'Entry 2 in the list should be a DataNode')
-        # TODO the reader doesn't glob the files in this order. Do I care?
-        # self.assertEqual(result['people'][0].export(), {'_id': '1', 'name': 'Jerry Seinfeld'})
-        # self.assertEqual(result['people'][1].export(), {'_id': '2', 'name': 'George Costanza'})
-        # self.assertEqual(result['people'][2].export(), {'_id': '3', 'name': 'Cosmo Kramer'})
 
     def test_read_only_yaml(self):
         # Parse the fixture which contains yml and other files
@@ -86,7 +69,7 @@ class ReaderTest(unittest.TestCase):
             'name': 'Jacob',
             'profile': '<p>This guy <strong>really</strong> likes markdown</p>'
         }
-        self.assertEqual(result['users'][0].export(), expected)
+        self.assertEqual(result['users'][0], expected)
 
 
 class Writertest(unittest.TestCase):
@@ -112,10 +95,8 @@ class Writertest(unittest.TestCase):
         self.assertTrue(os.path.isdir(path), "Directory %s does not exists" % path)
 
     def test_writing_single_simple(self):
-        node = DataNode()
-        node.populate({'_id': '1', 'name': 'Kell'})
         data = {
-            'users': [node]
+            'users': [{'_id': '1', 'name': 'Kell'}]
         }
 
         self.mfs.makedirs('/site/api')
@@ -150,10 +131,8 @@ class Writertest(unittest.TestCase):
         will have converted strings like "2014-10-09" into datetimes and we
         want to simply convert it back.
         """
-        node = DataNode()
-        node.populate({'_id': '1', 'date': datetime.date(2014, 10, 9)})
         data = {
-            'posts': [node]
+            'posts': [{'_id': '1', 'date': datetime.date(2014, 10, 9)}]
         }
 
         self.mfs.makedirs('/site/api')

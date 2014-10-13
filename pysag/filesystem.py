@@ -9,14 +9,6 @@ import datetime
 # TODO error handling for bad yaml
 
 
-class DataNode:
-    def populate(self, data):
-        self.data = data
-
-    def export(self):
-        return self.data
-
-
 class Reader:
     def __init__(self):
         self.md = markdown.Markdown()
@@ -53,10 +45,7 @@ class Reader:
 
                     del data['_markdown']
 
-                node = DataNode()
-                node.populate(data)
-
-                all_data[data_type].append(node)
+                all_data[data_type].append(data)
 
         return all_data
 
@@ -79,11 +68,9 @@ class Writer:
             if not os.path.isdir(dir):
                 os.makedirs(dir)
             for node in data[key]:
-                # TODO maybe node.export should happen elsewhere?
-                node_data = node.export()
-                all_data.append(node_data)
-                path = '%s/%s/%s.json' % (output_dir, key, node_data['_id'])
-                self._write_json(node_data, path)
+                all_data.append(node)
+                path = '%s/%s/%s.json' % (output_dir, key, node['_id'])
+                self._write_json(node, path)
 
             path = '%s/%s.json' % (output_dir, key)
             self._write_json(all_data, path)
