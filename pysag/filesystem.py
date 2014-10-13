@@ -11,7 +11,7 @@ import datetime
 
 class Reader:
     def __init__(self):
-        self.md = markdown.Markdown()
+        self.md = markdown.Markdown(extensions=['markdown.extensions.fenced_code'])
 
     def read(self, data_dir):
         # Walk through the directory {data_dir}. Any folders there become top
