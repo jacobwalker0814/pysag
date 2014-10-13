@@ -25,18 +25,16 @@ def run():
         "{}/{}".format(site_dir, api_dir)
     )
 
-    exclude_dirs = [data_dir, site_dir]
-    template_extensions = ['html']
     template_loader = jinja2.FileSystemLoader('.')
     template_env = jinja2.Environment(loader=template_loader)
 
     # TODO this could be a part of Writer and actually tested...
     # Copy top level (static) files to the site dir. Skip hidden files/folders
-    # and dirs in exclude_dirs. Files with an extension in template_extensions
-    # will be passed through Jinja2 instead of just copying
+    # and anything configured to be excluded. Files with an extension in
+    # template_extensions will be passed through Jinja2
     for root, dirs, files in os.walk('.'):
         # Skip hidden files and folders
-        files = [f for f in files if not f[0] == '.']
+        files = [f for f in files if not f[0] == '.' and f not in exclude_files]
         dirs[:] = [d for d in dirs if not d[0] == '.' and d not in exclude_dirs]
         for f in files:
             # Make the output directory
@@ -101,6 +99,9 @@ if '__main__' == __name__:
     data_dir = '_data'
     site_dir = '_site'
     api_dir = 'api'
+    exclude_dirs = [data_dir, site_dir]
+    exclude_files = []
+    template_extensions = ['html']
     port = 5000
     data_pages = {}
 
