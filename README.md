@@ -97,4 +97,6 @@ Run the tests with `nosetests`.
     * Separate file for dev requirements
 * Allow specifying the DataNode class in yml files
 * Make everything more "Pythonic"
+* Some mechanism to fetch just certain fields
 * Complete / document the executable
+* Ability to generate RSS feed and sitemap.xml?

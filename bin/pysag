@@ -6,11 +6,12 @@ import shutil
 import errno
 import SimpleHTTPServer
 import SocketServer
+import jinja2
 
 
 def run():
-    print "Generating data in {} from {}".format(site_dir, data_dir)
-    # Cleanse the pallate
+    print "Generating site in {} from {}".format(site_dir, data_dir)
+    # Cleanse the palate
     if os.path.isdir(site_dir):
         shutil.rmtree(site_dir)
 
@@ -23,19 +24,38 @@ def run():
         "{}/{}".format(site_dir, api_dir)
     )
 
-    # Copy top level (static) files to the site dir. Exclude the data dir and the
-    # site dir itself. Also exclude hidden files/folders.
     exclude_dirs = [data_dir, site_dir]
-    to_copy = [x for x in os.listdir('.') if x not in exclude_dirs and '.' != x[0]]
+    template_extensions = ['html']
+    template_loader = jinja2.FileSystemLoader('.')
+    template_env = jinja2.Environment(loader=template_loader)
 
-    for item in to_copy:
-        try:
-            shutil.copytree(item, "{}/{}".format(site_dir, item))
-        except OSError as exc:
-            if exc.errno == errno.ENOTDIR:
-                shutil.copy(item, "{}/{}".format(site_dir, item))
-            else:
-                raise
+    # TODO this could be a part of Writer and actually tested...
+    # Copy top level (static) files to the site dir. Skip hidden files/folders
+    # and dirs in exclude_dirs. Files with an extension in template_extensions
+    # will be passed through Jinja2 instead of just copying
+    for root, dirs, files in os.walk('.'):
+        # Skip hidden files and folders
+        files = [f for f in files if not f[0] == '.']
+        dirs[:] = [d for d in dirs if not d[0] == '.' and d not in exclude_dirs]
+        for f in files:
+            # Make the output directory
+            try:
+                os.makedirs("{}/{}".format(site_dir, root[2:]))
+            except OSError:
+                pass
+
+            file_path = "{}/{}".format(root, f)
+            file_name, file_extension = os.path.splitext(file_path)
+            if file_extension[1:] not in template_extensions:
+                shutil.copyfile(file_path, "{}/{}".format(site_dir, file_path))
+                continue
+
+            # File must have a templated extension. Get Jinja2 template.
+            template = template_env.get_template(file_path)
+
+            # Write template to file
+            with open("{}/{}".format(site_dir, file_path[2:]), 'w') as output_file:
+                output_file.write(template.render(**data))
 
 
 def serve():
@@ -58,13 +78,13 @@ if '__main__' == __name__:
     data_dir = '_data'
     site_dir = '_site'
     api_dir = 'api'
-    port = 8000
+    port = 5000
 
     # Source in user defined configuration if present
     if os.path.exists('pysag.py'):
         execfile('pysag.py')
 
-    commands= ['help', 'run', 'serve']
+    commands = ['help', 'run', 'serve']
 
     parser = argparse.ArgumentParser(description='The Python Static API Generator')
     parser.add_argument('command', choices=commands, help='The pysag action to take', default='help')

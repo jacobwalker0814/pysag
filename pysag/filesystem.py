@@ -79,6 +79,7 @@ class Writer:
             if not os.path.isdir(dir):
                 os.makedirs(dir)
             for node in data[key]:
+                # TODO maybe node.export should happen elsewhere?
                 node_data = node.export()
                 all_data.append(node_data)
                 path = '%s/%s/%s.json' % (output_dir, key, node_data['_id'])
