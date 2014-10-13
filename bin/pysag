@@ -7,6 +7,7 @@ import errno
 import SimpleHTTPServer
 import SocketServer
 import jinja2
+import copy
 
 
 def run():
@@ -57,6 +58,28 @@ def run():
             with open("{}/{}".format(site_dir, file_path[2:]), 'w') as output_file:
                 output_file.write(template.render(**data))
 
+    # If any data segments were asked to generate pages
+    for key in data:
+        if key in data_pages:
+            page_info = data_pages[key]
+            page_dir = "{}/{}".format(site_dir, page_info['directory'])
+            page_template = template_env.get_template(page_info['template'])
+            try:
+                os.makedirs(page_dir)
+            except OSError:
+                pass
+            for node in data[key]:
+                title_template = jinja2.Template(page_info['file'])
+                # Make a dict with the node keyed using the requested name.
+                # This way we can unpack it later and it will work with that
+                # name in templates
+                page_data = copy.copy(data)
+                page_data[page_info['variable']] = node
+                page_title = title_template.render(**page_data)
+                page_file = "{}/{}".format(page_dir, page_title)
+                with open(page_file, 'w') as output_file:
+                    output_file.write(page_template.render(**page_data))
+
 
 def serve():
     # Serve up the site directory
@@ -79,6 +102,7 @@ if '__main__' == __name__:
     site_dir = '_site'
     api_dir = 'api'
     port = 5000
+    data_pages = {}
 
     # Source in user defined configuration if present
     if os.path.exists('pysag.py'):
